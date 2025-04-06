@@ -169,12 +169,12 @@ struct GoalSheet: View {
             isReadInputValid = false
             isGoalInputValid = Int(bookGoal) != nil
             return
-        }
+        } // -> guard
         guard let intBookGoal = Int(bookGoal), intBookGoal > intBookCompleted else {
             isReadInputValid = true
             isGoalInputValid = false
             return
-        }
+        } // -> guard
         isReadInputValid = true
         isGoalInputValid = true
         let newGoal = DBGoalAttempt(booksCompleted: intBookCompleted, booksGoal: intBookGoal, period: periodSelected, endDate: endDate)
@@ -196,8 +196,9 @@ struct GoalSheet: View {
             else { return }
         activeGoals[0].booksCompleted = intBookCompleted
         do {
-            try context.save()
             showSheet.toggle()
+            selectedDetent = .fraction(0.65)
+            try context.save()
         } catch {
             print("Failed to save: \(error)")
         } // -> do-catch
@@ -207,8 +208,9 @@ struct GoalSheet: View {
     func deleteGoal(goal: DBGoalAttempt) {
         context.delete(goal)
         do {
-            try context.save()
             showSheet.toggle()
+            selectedDetent = .fraction(0.65)
+            try context.save()
         } catch {
             print("Failed to save: \(error)")
         } // -> do-catch

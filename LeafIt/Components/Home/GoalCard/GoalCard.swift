@@ -35,7 +35,10 @@ struct GoalCard: View {
                 
                 // MARK: CONDITION - IS GOAL SET?
                 if let goal = activeGoals.first {
-                    Text("\(goal.booksCompleted) / \(goal.booksGoal) books")
+                    Text("\(goal.booksCompleted)")
+                        .foregroundStyle(.accent)
+                        .font(.system(size: 14, weight: .regular))
+                    + Text(" / \(goal.booksGoal) \((goal.booksGoal == 1) ? "book" : "books")")
                         .foregroundStyle(.primaryGray)
                         .font(.system(size: 14, weight: .regular))
                 } else {
