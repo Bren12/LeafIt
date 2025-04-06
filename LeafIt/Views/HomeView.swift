@@ -69,19 +69,21 @@ struct HomeView: View {
                         
                         // MARK: BookView
                         ForEach(BookFetchType.allCases, id: \.self) { type in
-                            Spacer()
-                                .frame(height: 20)
-                            SectionBookView(type: type)
+                            if type != .query {
+                                Spacer()
+                                    .frame(height: 30)
+                                SectionView(type: type)
+                            } // -> if
                         } // -> ForEach
                         
                         Spacer()
-                            .frame(height: 100)
                         
                     } // -> VStack
                     .padding(.horizontal)
                     
                 } // -> ScrollView
                 .scrollIndicators(.hidden)
+                .clipShape(Rectangle())
                 
             } // -> ZStack
             // MARK: GoalSheet

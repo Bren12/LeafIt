@@ -22,7 +22,7 @@ struct EmptyReadingView: View {
                 .frame(height: 15)
             Text("Let's start a new journey!")
                 .foregroundStyle(.gray)
-                .font(.system(size: 15, weight: .medium))
+                .font(.system(size: 20, weight: .medium))
             Spacer()
                 .frame(height: 30)
         } // -> VStack
@@ -32,8 +32,8 @@ struct EmptyReadingView: View {
         } label: {
             Text("Add book")
                 .foregroundStyle(.primaryWhite)
-                .font(.system(size: 15, weight: .semibold))
-                .frame(width: 120, height: 40)
+                .font(.system(size: 20, weight: .semibold))
+                .frame(width: 150, height: 45)
                 .background(.accent)
                 .cornerRadius(5)
         } // -> Button
