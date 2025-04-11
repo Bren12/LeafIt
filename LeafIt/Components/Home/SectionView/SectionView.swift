@@ -37,7 +37,7 @@ struct SectionView: View {
                                  BookView(book: book)
                             } label: {
                                 if let cover = book.volumeInfo?.imageLinks?.bestImageURL {
-                                    AsyncImage(url: URL(string: (cover).replacingOccurrences(of: "http://", with: "https://"))) { image in
+                                    AsyncImage(url: URL(string: cover.replacingOccurrences(of: "http://", with: "https://"))) { image in
                                         image
                                             .resizable()
                                             .scaledToFit()

@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RootView: View {
+    
+    @Environment(\.modelContext) private var context
+    @Query var activeGoals: [DBList]
     
     @State private var showHomeView: Bool = false
     @State private var isTransitioning: Bool = false
@@ -42,9 +46,26 @@ struct RootView: View {
                 } // -> withAnimation
             } // -> DispatchQueue
             
+            // Create default list if not exist
+            
         } // -> onAppear
         
     } // -> body
+    
+    func createDefaultList() {
+        let descriptor = FetchDescriptor<DBList>(
+            predicate: #Predicate { $0.name == "Now Reading" }
+        ) // -> descriptor
+        if let existing = try? context.fetch(descriptor), existing.isEmpty {
+            let defaultList = DBList(name: "Now Reading", dateCreated: Date())
+            context.insert(defaultList)
+            do {
+                try context.save()
+            } catch {
+                print("Failed to save: \(error)")
+            } // -> do-try
+        } // -> if
+    } // -> createDefaultList
     
 } // -> RootView
 

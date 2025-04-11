@@ -9,15 +9,15 @@ import Foundation
 
 struct BookSearchResponse: Codable {
     let totalItems: Int
-    var items: [Book]?
-}
+    let items: [Book]?
+} // -> BookSearchResponse
 
 struct Book: Codable, Identifiable {
     let id: String?
     let selfLink: String
-    var volumeInfo: VolumeInfo?
+    let volumeInfo: VolumeInfo?
     let accessInfo: AccessInfo?
-}
+} // -> Book
 
 struct VolumeInfo: Codable {
     let title: String
@@ -30,7 +30,7 @@ struct VolumeInfo: Codable {
     let ratingsCount: Int?
     let categories: [String]?
     let maturityRating: String?
-    var imageLinks: ImageLinks?
+    let imageLinks: ImageLinks?
     let language: String?
     
     init(title: String,
@@ -58,16 +58,16 @@ struct VolumeInfo: Codable {
         self.maturityRating = maturityRating
         self.imageLinks = imageLinks
         self.language = language
-    }
-}
+    } // -> init
+} // -> VolumeInfo
 
 struct ImageLinks: Codable {
-    var smallThumbnail: String?
-    var thumbnail: String?
-    var small: String?
-    var medium: String?
-    var large: String?
-    var extraLarge: String?
+    let smallThumbnail: String?
+    let thumbnail: String?
+    let small: String?
+    let medium: String?
+    let large: String?
+    let extraLarge: String?
     var bestImageURL: String? {
         return extraLarge
             ?? large
@@ -75,7 +75,7 @@ struct ImageLinks: Codable {
             ?? small
             ?? thumbnail
             ?? smallThumbnail
-    }
+    } // -> bestImageURL
     
     init(
         smallThumbnail: String? = nil,
@@ -91,15 +91,13 @@ struct ImageLinks: Codable {
         self.medium = medium
         self.large = large
         self.extraLarge = extraLarge
-    }
-}
+    } // -> init
+} // -> ImageLinks
 
 struct AccessInfo: Codable {
     let webReaderLink: String?
     
-    init(
-        webReaderLink: String? = nil
-    ) {
+    init(webReaderLink: String? = nil) {
         self.webReaderLink = webReaderLink
-    }
-}
+    } // -> init
+} // -> AccessInfo

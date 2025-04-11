@@ -87,29 +87,29 @@ class BooksQueryManager: ObservableObject {
     } // -> requestBooks
     
     // Extract best quality covers
-    func requestCoverImage(bookUrl: String, index: Int) {
-        let url: URL = URL(string: bookUrl)!
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                } // -> DispatchQueue
-                print("search failed")
-                return
-            } // -> guard
-            
-            do {
-                let decoder = JSONDecoder()
-                let searchResponse = try decoder.decode(Book.self, from: data)
-                self.books[index].volumeInfo?.imageLinks = searchResponse.volumeInfo?.imageLinks
-            } catch {
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                } // -> DispatchQueue
-                print("request failed \(error)")
-            } // -> do-catch
-        } // -> URLSession
-        .resume()
-    } // -> requestCoverImage
+//    func requestCoverImage(bookUrl: String, index: Int) {
+//        let url: URL = URL(string: bookUrl)!
+//        URLSession.shared.dataTask(with: url) { data, response, error in
+//            guard let data = data else {
+//                DispatchQueue.main.async {
+//                    self.isLoading = false
+//                } // -> DispatchQueue
+//                print("search failed")
+//                return
+//            } // -> guard
+//            
+//            do {
+//                let decoder = JSONDecoder()
+//                let searchResponse = try decoder.decode(Book.self, from: data)
+//                self.books[index].volumeInfo?.imageLinks = searchResponse.volumeInfo?.imageLinks
+//            } catch {
+//                DispatchQueue.main.async {
+//                    self.isLoading = false
+//                } // -> DispatchQueue
+//                print("request failed \(error)")
+//            } // -> do-catch
+//        } // -> URLSession
+//        .resume()
+//    } // -> requestCoverImage
     
 } // -> BooksQueryManager

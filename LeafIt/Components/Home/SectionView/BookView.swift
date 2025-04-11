@@ -15,145 +15,124 @@ struct BookView: View {
     private var title: String { book.volumeInfo?.title ?? "" }
     private var subTitle: String { book.volumeInfo?.subtitle ?? "" }
     private var authors: [String] { book.volumeInfo?.authors ?? [] }
-    private var rating: Float { book.volumeInfo?.averageRating ?? 0 }
+    private var rating: Float? { book.volumeInfo?.averageRating ?? 0.0 }
     private var pages: Int { book.volumeInfo?.pageCount ?? 0 }
     private var language: String { book.volumeInfo?.language ?? "" }
-    private var release: String { book.volumeInfo?.publishedDate ?? "" }
+    private var releaseDate: String { book.volumeInfo?.publishedDate ?? "" }
+    private var categories: [String] { book.volumeInfo?.categories ?? [] }
     private var description: String { book.volumeInfo?.description ?? ""}
     
-    @State private var expanded: Bool = false
     @State var showSheet: Bool = false
     
     var body: some View {
         
-        ZStack {
+        ZStack(alignment: .top) {
             
             Color.primaryWhite
-            
-            ScrollView {
+                .ignoresSafeArea(edges: .top)
+                
+            VStack {
                 
                 VStack {
                     
+                    // MARK: IMAGE
+                    if !thumbnail.isEmpty {
+                        BookWebImage(thumbnail: thumbnail)
+                    } else {
+                        NoCoverBook()
+                    } // -> if-else
+                    
                     Spacer()
-                        .frame(height: 125)
+                        .frame(height: 30)
                     
-                    AsyncImage(url: URL(string: thumbnail.replacingOccurrences(of: "http://", with: "https://"))) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 10)
-                            ) // -> clipShape
-                    } placeholder: {
-                        ProgressView()
-                    } // AsyncImage
-                    .frame(width: 175)
-                    .shadow(radius: 5)
+                    // MARK: TITLE
+                    if !title.isEmpty {
+                        Text(title)
+                            .foregroundStyle(.primaryBlack)
+                            .font(.system(size: 25, weight: .bold))
+                            .multilineTextAlignment(.center)
+                    } // -> if
                     
-                    Divider()
+                    // MARK: SUBTITLE
+                    if !subTitle.isEmpty {
+                        Text(subTitle)
+                            .foregroundStyle(.primaryBlack)
+                            .font(.system(size: 20, weight: .medium))
+                            .multilineTextAlignment(.center)
+                    } // -> if
                     
-                    Text(title)
-                        .foregroundStyle(.primaryBlack)
-                        .font(.system(size: 30, weight: .bold))
-                        .multilineTextAlignment(.center)
-                    
-                    Divider()
-                    
-                    HStack{
-                        VStack {
-                            Text(authors.count > 1 ? "Authors:" : "Author:")
-                                .foregroundStyle(.primaryBlack)
-                                .font(.system(size: 20, weight: .bold))
-                            Spacer()
-                        } // -> VStack
-                        VStack(alignment: .leading) {
-                            ForEach(authors, id: \.self) {author in
-                                Text(author)
-                                    .foregroundStyle(.primaryBlack)
-                                    .font(.system(size: 20, weight: .regular))
-                            } // -> ForEach
-                        } // -> Vstack
+                    if !title.isEmpty || !subTitle.isEmpty {
                         Spacer()
-                    } // -> HStack
+                            .frame(height: 15)
+                    } // -> if
                     
-                    Divider()
+                    // MARK: AUTHORS
+                    ForEach(authors, id: \.self) { author in
+                        Text(author)
+                            .foregroundStyle(.primaryGray)
+                            .font(.system(size: 17.5, weight: .regular))
+                    } // -> ForEach
                     
-                    VStack(spacing: 3) {
-                        
+                    if !authors.isEmpty {
+                        Spacer()
+                            .frame(height: rating ?? 0.0 > 1.0 ? 15 : 20)
+                    } // -> if
+                    
+                    // MARK: RATING
+                    if let ratingExist = rating {
                         HStack {
-                            Text("Description:")
-                                .foregroundStyle(.primaryBlack)
-                                .font(.system(size: 20, weight: .bold))
-                            Spacer()
+                            ForEach(0..<Int(ratingExist), id:\.self) { _ in
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(.yellow)
+                            } // -> ForEach
                         } // -> HStack
-                        
-                        Text(description)
-                            .foregroundStyle(.primaryBlack)
-                            .font(.system(size: 18, weight: .regular))
-                            .lineLimit(expanded ? nil : 5)
-                        
-                        if description.count > 200 {
-                            HStack {
-                                Spacer()
-                                Button(action: {
-                                    expanded.toggle()
-                                }, label: {
-                                    Text(expanded ? "...read less" : "...read more")
-                                }) // -> Button
-                            } // -> HStack
-                        } // -> if
-                        
-                    } // VStack
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("Pages:")
-                            .foregroundStyle(.primaryBlack)
-                            .font(.system(size: 20, weight: .bold))
-                        + Text(" \(pages)")
-                            .foregroundStyle(.primaryBlack)
-                            .font(.system(size: 20, weight: .regular))
                         Spacer()
-                    } // -> HStack
+                            .frame(height: 20)
+                    } // -> if
                     
-                    Divider()
+                    // MARK: DETAIL INFO
+                    if pages != 0 || !language.isEmpty || !releaseDate.isEmpty {
+                        DetailBook(pages: pages, language: language, releaseDate: releaseDate)
+                        Spacer()
+                            .frame(height: 15)
+                    } // -> if
                     
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    Button {
-                        showSheet.toggle()
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(.accent)
-                                .frame(height: 40)
-                            Text("Add Book")
-                                .foregroundStyle(.primaryWhite)
-                                .font(.system(size: 15, weight: .semibold))
-                        } // -> ZStack
-                    }// -> Button
+                    // MARK: CATEGORIES
+                    if categories.count > 0 {
+                        CategoriesView(categories: categories)
+                        Spacer()
+                            .frame(height: 15)
+                    } // -> if
                     
                 } // -> VStack
-                .frame(width: 350)
+                .padding(.horizontal)
                 
-                Spacer()
-                    .frame(height: 100)
-                
-            } // -> ScrollView
+                // MARK: DESCRIPTION
+                DescriptionView(description: description)
+            
+            } // -> VStack
             
         } // -> ZSStack
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+//                    deleteTrip(trip: trip)
+//                    dismiss()
+                }) {
+                    Image(systemName: "bookmark")
+                } // -> Button
+            } // -> ToolbarItem
+        } // -> ZSStack.toolbar
         
-        .sheet(isPresented: $showSheet) {
+//        .sheet(isPresented: $showSheet) {
 //            BookSheetView(showSheet: $showSheet, book: book)
 //                .presentationDetents([.large])
-        }
+//        }
         
     } // -> body
     
 } // -> BookView
 
 #Preview {
-    BookView(book: sampleBook)
+    BookView(book: sampleBook2)
 }
