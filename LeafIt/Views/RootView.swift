@@ -47,6 +47,7 @@ struct RootView: View {
             } // -> DispatchQueue
             
             // Create default list if not exist
+            createDefaultList()
             
         } // -> onAppear
         

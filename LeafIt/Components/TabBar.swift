@@ -22,15 +22,13 @@ struct TabBar: View {
                 .tag(Tab.home)
             
 //            ExploreView()
-            HomeView(selectedTab: $selectedTab)
-//            BookIcon()
+            LibraryView()
                 .tabItem {
                     Label(Tab.explore.title, systemImage: Tab.explore.icon)
                 }
                 .tag(Tab.explore)
             
-//            LibraryView()
-            HomeView(selectedTab: $selectedTab)
+            LibraryView()
                 .tabItem {
                     Label(Tab.library.title, systemImage: Tab.library.icon)
                 }

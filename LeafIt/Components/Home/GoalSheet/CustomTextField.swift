@@ -36,6 +36,8 @@ struct CustomTextField: View {
                     .frame(height: 30)
                     .padding(.leading)
                     .keyboardType(isPadNumeric ? .numberPad : .default)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
                     .overlay {
                         RoundedRectangle(cornerRadius: 5)
                             .stroke(isInputValid ? .secondaryGray : .primaryRed, lineWidth: 1)
